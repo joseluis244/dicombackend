@@ -130,7 +130,7 @@ exports.files = function files(ID){
             try{
                 Pres(res[0].content)
             }catch(e){
-                fs.appendFileSync("./logs/error.txt",`${new Date()}---->${ID}---->${e}\n`)
+                fs.appendFileSync("./errorslogs/error.txt",`${new Date()}---->${ID}---->${e}\n`)
                 Pres(null)
             }
         })
