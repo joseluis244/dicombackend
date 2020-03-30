@@ -17,6 +17,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.9.2",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.4.3"
+    "nodemailer": "^6.4.3",
+    "pako": "^1.0.11"
   }
 }

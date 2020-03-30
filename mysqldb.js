@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken')
 const fs = require("fs")
+const pako = require('pako');
 
 const con = mysql.createConnection({
     host: "localhost",
@@ -10,7 +11,6 @@ const con = mysql.createConnection({
 });
 
 exports.buscarestudios = async function buscarestudios(inicio,final){
-console.log(`${inicio}---------${final}`)
     return new Promise ((Pres,Prej)=>{
     let con = mysql.createConnection({
         host: "localhost",
@@ -116,6 +116,29 @@ function ordenar(files){
 }
 
 exports.files = function files(ID){
+    return new Promise((Pres,Prej)=>{
+        let con = mysql.createConnection({
+            host: "localhost",
+            user: "medicaltecmysql",
+            password: "Medicaltec310188$",
+            database: "medicaltec"
+        });
+        con.connect();
+        let query = `SELECT content 
+        FROM StorageArea where uuid = "${ID}";`
+        con.query(query,(err,res)=>{
+            try{
+                Pres(res[0].content)
+            }catch(e){
+                fs.appendFileSync("./errorslogs/error.txt",`${new Date()}---->${ID}---->${e}\n`)
+                Pres(null)
+            }
+        })
+        con.end()
+    })
+}
+
+exports.files2 = function files2(ID){
     return new Promise((Pres,Prej)=>{
         let con = mysql.createConnection({
             host: "localhost",

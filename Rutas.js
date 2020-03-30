@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config()
 const mensaje = require('./generarcorreo');
 const mysqldb = require('./mysqldb');
+const pako = require("pako")
 const fs = require('fs')
 ///////////////////////////////
 var mongoose = require('mongoose');
@@ -102,6 +103,15 @@ router.get('/getfiles/:id',(req,res)=>{
         res.send(DBres)
     })
 })
+
+router.get('/getfiles2/:id',(req,res)=>{
+    mysqldb.files2(req.param('id'))
+    .then((DBres)=>{
+        let newfile = pako.gzip(DBres.toString())
+        res.send(newfile)
+    })
+})
+
 
 router.get('/existeinforme/:id',(req,res)=>{
     db.informesF(req.params.id)
