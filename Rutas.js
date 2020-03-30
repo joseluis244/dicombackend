@@ -27,6 +27,12 @@ const transporter = nodemailer.createTransport({
 });
 
 
+router.all("/",(req,res)=>{
+    console.log("ingreso")
+    console.log(req)
+    res.send("Fuera de aqui")
+})
+
 router.post('/login',(req,res)=>{
     db.login(req.body)
     .then((dbres)=>{
