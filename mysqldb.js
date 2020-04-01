@@ -3,21 +3,23 @@ const jwt = require('jsonwebtoken')
 const fs = require("fs")
 const pako = require('pako');
 
-const con = mysql.createConnection({
+
+const condata = {
     host: "localhost",
     user: "medicaltecmysql",
     password: "Medicaltec310188$",
     database: "medicaltec"
-});
-
+}
+//const con = mysql.createConnection({
+//    host: "localhost",
+//    user: "medicaltecmysql",
+//    password: "Medicaltec310188$",
+//    database: "medicaltec"
+//});
+// var con
 exports.buscarestudios = async function buscarestudios(inicio,final){
+    let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-    let con = mysql.createConnection({
-        host: "localhost",
-        user: "medicaltecmysql",
-        password: "Medicaltec310188$",
-        database: "medicaltec"
-    });
     let query = `SELECT fecha.id As ID, CAST(fecha.value as UNSIGNED) As FECHA, nombre.value As NOMBRE, sexo.value As SEXO, pas_id.value As PAS_ID,
     res.publicId As EST_UID
     FROM MainDicomTags fecha 
@@ -41,17 +43,21 @@ exports.buscarestudios = async function buscarestudios(inicio,final){
             }
             Pres(res)
         })
-        con.end()
+        setTimeout(()=>{
+            con.end()
+        },2000)
     })
 }
 
 function agregarseries(ID){
+    let con = mysql.createConnection(condata);
     return new Promise((Pres,Prej)=>{
         let query = `SELECT serie.internalId As SER_UID, serie.publicId As SER_ID, modalidad.value As MODALIDAD 
         FROM Resources serie
         JOIN MainDicomTags modalidad ON modalidad.id = serie.internalId
         WHERE serie.parentId=${ID}
         AND modalidad.tagGroup=8 AND modalidad.tagElement=96`
+        con.connect();
         con.query(query,async (err, res, field)=>{
             for(let i = 0 ; i <= res.length-1 ; i++){
                 let nombre = await getnombre(res[i].SER_UID,i)
@@ -61,25 +67,30 @@ function agregarseries(ID){
             }
             Pres(res)
         })
+        con.end()
     })
 }
 
 function getnombre(ID,i){
+    let con = mysql.createConnection(condata);
     return new Promise((Pres,Prej)=>{
         let query = `SELECT value as NOMBRE 
                     FROM medicaltec.MainDicomTags 
                     WHERE (id = ${ID} and tagGroup = 8 and tagElement = 4158) or (id = ${ID} and tagGroup = 24 and tagElement = 5120)`
-                    con.query(query,(err,res)=>{
+            con.connect();
+            con.query(query,(err,res)=>{
             try{
                 Pres(res[0].NOMBRE)
             }catch(e){
                 Pres(`serie-${i}`)
             }
         })
+        con.end()
     })
 }
 
 function getarchivos(ID){
+    let con = mysql.createConnection(condata);
     return new Promise((Pres,Prej)=>{
         let query = `select instancia.uuid As INS_UID 
         FROM medicaltec.Resources serie 
@@ -90,11 +101,13 @@ function getarchivos(ID){
         JOIN medicaltec.MainDicomTags main on res.internalId = main.id 
         JOIN medicaltec.AttachedFiles att on res.internalId = att.id 
         WHERE res.parentId = ${ID} and main.tagGroup = 32 and main.tagElement = 19 and att.fileType = 1;`
+        con.connect();
         con.query(query1,(err,res)=>{
             let resorden = ordenar(res)
             //console.log(resorden)
             Pres(resorden)
         })
+        con.end()
     })
 }
 
@@ -117,12 +130,7 @@ function ordenar(files){
 
 exports.files = function files(ID){
     return new Promise((Pres,Prej)=>{
-        let con = mysql.createConnection({
-            host: "localhost",
-            user: "medicaltecmysql",
-            password: "Medicaltec310188$",
-            database: "medicaltec"
-        });
+        let con = mysql.createConnection(condata);
         con.connect();
         let query = `SELECT content 
         FROM StorageArea where uuid = "${ID}";`
@@ -140,12 +148,7 @@ exports.files = function files(ID){
 
 exports.files2 = function files2(ID){
     return new Promise((Pres,Prej)=>{
-        let con = mysql.createConnection({
-            host: "localhost",
-            user: "medicaltecmysql",
-            password: "Medicaltec310188$",
-            database: "medicaltec"
-        });
+        let con = mysql.createConnection(condata);
         con.connect();
         let query = `SELECT content 
         FROM StorageArea where uuid = "${ID}";`
@@ -165,12 +168,7 @@ module.exports.externo = async function externo(token){
     return new Promise((Pres,Prej)=>{
         try{
             let estudio = jwt.verify(token,'Medicaltec3101')
-            let con = mysql.createConnection({
-                host: "localhost",
-                user: "medicaltecmysql",
-                password: "Medicaltec310188$",
-                database: "medicaltec"
-            });
+            let con = mysql.createConnection(condata);
             let query = `SELECT fecha.id as ID, fecha.value as FECHA, nombre.value as NOMBRE, sexo.value as SEXO, pasid.value as PAS_ID 
             FROM medicaltec.MainDicomTags fecha 
             JOIN medicaltec.MainDicomTags nombre ON nombre.id = fecha.id 
