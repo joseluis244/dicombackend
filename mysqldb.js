@@ -69,7 +69,7 @@ function getnombre(ID,i){
         let query = `SELECT value as NOMBRE 
                     FROM medicaltec.MainDicomTags 
                     WHERE (id = ${ID} and tagGroup = 8 and tagElement = 4158) or (id = ${ID} and tagGroup = 24 and tagElement = 5120)`
-        con.query(query,(err,res)=>{
+                    con.query(query,(err,res)=>{
             try{
                 Pres(res[0].NOMBRE)
             }catch(e){
@@ -183,6 +183,7 @@ module.exports.externo = async function externo(token){
                 sqlres[0].SERIES = series
                 Pres({estado:true,estudio:sqlres[0]})
             })
+            con.end()
         }catch(e){
             Pres({estado:false,estudio:null})
         }
