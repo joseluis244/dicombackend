@@ -33,10 +33,10 @@ return(
                             style="padding: 40px 0 30px 0;"
                           >
                             <img
-                              src="https://uploads.codesandbox.io/uploads/user/ce79f30c-541c-437c-9d78-8f7844094ac3/9uKd-logoletras2.png"
+                              src="https://uploads.codesandbox.io/uploads/user/ce79f30c-541c-437c-9d78-8f7844094ac3/3-sz-logoletras.png"
                               alt="med"
                               width="300"
-                              height="300"
+                              height="350"
                               style="display: block;"
                             />
                           </td>
@@ -57,7 +57,7 @@ return(
                                 <td
                                   style="padding: 20px 5px 30px 5px;font-size: 20px;font-family: monospace;"
                                 >
-                                  Future Imagenes Envia este correo electronico para
+                                  Medicaltec Soluciones Envia este correo electronico para
                                   notificar que ya tiene acceso a el estudio de:<span style="font-weight: bold;"> ${modalidad} </span>
                                   del paciente:<span style="font-weight: bold;"> ${nombre} </span>haciendo click
                                   en el enlace inferior:
