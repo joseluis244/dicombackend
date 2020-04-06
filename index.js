@@ -6,13 +6,13 @@ const Rutas = require('./Rutas');
 const Servicio = require("./servicio")
 
 
-
-app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded());
 app.use(fileUpload({
     createParentPath: true
 }));
+
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({extended: true}));
 app.use('/',Rutas)
 app.use('/servicio',Servicio)
 
