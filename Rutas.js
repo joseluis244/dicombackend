@@ -84,7 +84,7 @@ router.post('/sharecorreo',(req,res)=>{
     });
 })
 
-router.post('/cargarInforme',(req,res)=>{
+router.post('/cargarInforme', async (req,res)=>{
     console.log(req)
     try{
         let estudio = JSON.parse(req.body.estudio)
