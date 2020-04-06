@@ -85,6 +85,7 @@ router.post('/sharecorreo',(req,res)=>{
 })
 
 router.post('/cargarInforme',(req,res)=>{
+    console.log(req)
     try{
         let estudio = JSON.parse(req.body.estudio)
         let informe = req.files.file
