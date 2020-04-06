@@ -85,7 +85,8 @@ router.post('/sharecorreo',(req,res)=>{
 })
 
 router.post('/cargarInforme', async (req,res)=>{
-    console.log(req)
+    console.log(req.body)
+    /*
     try{
         let estudio = JSON.parse(req.body.estudio)
         let informe = req.files.file
@@ -94,7 +95,7 @@ router.post('/cargarInforme', async (req,res)=>{
         res.json({estado:true})
     }catch(e){
         console.log(e)
-    }
+    }*/
 })
 
 router.get('/listaclientes',(req,res)=>{
