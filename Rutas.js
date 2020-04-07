@@ -88,11 +88,9 @@ router.post('/sharecorreo',(req,res)=>{
 })
 
 router.post('/cargarInforme',upload.any(), (req,res)=>{
-    console.log(req.body)
-    console.log(req.files)
        let estudio = JSON.parse(req.body.estudio)
        let fechasubida = req.body.fechasubida
-       let informe = req.files.file
+       let informe = req.files[0]
        db.guardarinforme(informe,estudio,fechasubida)
        res.json({estado:true})
 })
