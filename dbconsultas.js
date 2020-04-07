@@ -38,25 +38,22 @@ module.exports.comprobar = async function comprobar(token){
 }
 
 module.exports.guardarinforme = async function guardarinforme(informe,estudio,fechasubida){
-    console.log(informe)
-    console.log(estudio)
-    console.log(fechasubida)
-    //informe.mv('./informes/'+nuevonombreinforme)
-    //let data = {
-    //    ID:  estudio.ID,
-    //    FECHA: moment(estudio.FECHA,'YYYYMMDD').format(),
-    //    NOMBRE: estudio.NOMBRE,
-    //    SEXO: estudio.SEXO,
-    //    PAS_ID: estudio.PAS_ID,
-    //    MODALIDAD: estudio.SERIES[0].MODALIDAD,
-    //    INFORME:{
-    //        FECHA: nf,
-    //        NOMBRE: nuevonombreinforme
-    //    }
-    //}
-    //let informeestudio = new informes(data)
-    //informeestudio.save(()=>{})
-    //return true
+    let nf = new Date(fechasubida)
+    let data = {
+        ID:  estudio.ID,
+        FECHA: moment(estudio.FECHA,'YYYYMMDD').format(),
+        NOMBRE: estudio.NOMBRE,
+        SEXO: estudio.SEXO,
+        PAS_ID: estudio.PAS_ID,
+        MODALIDAD: estudio.SERIES[0].MODALIDAD,
+        INFORME:{
+            FECHA: nf,
+            NOMBRE: informe.filename
+        }
+    }
+    let informeestudio = new informes(data)
+    informeestudio.save(()=>{})
+    return true
 }
 
 module.exports.leerlistaclientes = async function leerlistaclientes(){
