@@ -90,16 +90,11 @@ router.post('/sharecorreo',(req,res)=>{
 router.post('/cargarInforme',upload.any(), (req,res)=>{
     console.log(req.body)
     console.log(req.files)
-    res.json({estado:true})
-    //try{
-    //    let estudio = JSON.parse(req.body.estudio)
-    //    let informe = req.files.file
-    //    let fechasubida = req.body.fechasubida
-    //    db.guardarinforme(informe,estudio,fechasubida)
-    //    res.json({estado:true})
-    //}catch(e){
-    //    console.log(e)
-    //}
+       let estudio = JSON.parse(req.body.estudio)
+       let fechasubida = req.body.fechasubida
+       let informe = req.files.file
+       db.guardarinforme(informe,estudio,fechasubida)
+       res.json({estado:true})
 })
 
 router.get('/listaclientes',(req,res)=>{
