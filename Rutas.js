@@ -7,6 +7,9 @@ const mensaje = require('./generarcorreo');
 const mysqldb = require('./mysqldb');
 const pako = require("pako")
 const fs = require('fs')
+const multer  = require('multer')
+
+const upload = multer({ dest: 'informes/' })
 ///////////////////////////////
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/medpacs', {useNewUrlParser: true});
@@ -84,17 +87,19 @@ router.post('/sharecorreo',(req,res)=>{
     });
 })
 
-router.post('/cargarInforme', async (req,res)=>{
+router.post('/cargarInforme',upload.any(), (req,res)=>{
     console.log(req.body)
-    try{
-        let estudio = JSON.parse(req.body.estudio)
-        let informe = req.files.file
-        let fechasubida = req.body.fechasubida
-        db.guardarinforme(informe,estudio,fechasubida)
-        res.json({estado:true})
-    }catch(e){
-        console.log(e)
-    }
+    console.log(req.files)
+    res.json({estado:true})
+    //try{
+    //    let estudio = JSON.parse(req.body.estudio)
+    //    let informe = req.files.file
+    //    let fechasubida = req.body.fechasubida
+    //    db.guardarinforme(informe,estudio,fechasubida)
+    //    res.json({estado:true})
+    //}catch(e){
+    //    console.log(e)
+    //}
 })
 
 router.get('/listaclientes',(req,res)=>{
