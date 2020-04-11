@@ -112,7 +112,7 @@ router.get('/getfiles/:id',(req,res)=>{
 router.get('/getfileszip/:id',(req,res)=>{
     mysqldb.files(req.param('id'))
     .then((DBres)=>{
-        console.log(DBres)
+        console.log(DBres.length)
         let zip = pako.gzip(new Uint8Array(DBres))
         res.send(zip)
     })
