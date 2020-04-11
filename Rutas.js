@@ -109,11 +109,11 @@ router.get('/getfiles/:id',(req,res)=>{
     })
 })
 
-router.get('/getfiles2/:id',(req,res)=>{
-    mysqldb.files2(req.param('id'))
+router.get('/getfileszip/:id',(req,res)=>{
+    mysqldb.files(req.param('id'))
     .then((DBres)=>{
-        let newfile = pako.gzip(DBres.toString())
-        res.send(newfile)
+        console.log(DBres)
+        res.send(DBres)
     })
 })
 
