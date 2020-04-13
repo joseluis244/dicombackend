@@ -129,9 +129,7 @@ router.get('/descargarinforme/:file',(req,res)=>{
 })
 
 router.get('/descargarinformever/:file',(req,res)=>{
-    //let inf = fs.readFileSync(`./informes/${req.params.file}`)
-    res.contentType("application/pdf")
-    res.send(Buffer(`./informes/${req.params.file}`))
+    res.sendfile(`./informes/${req.params.file}`)
 })
 
 router.get('/visorexterno/:token',(req,res)=>{
