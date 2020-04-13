@@ -114,6 +114,7 @@ router.get('/getfileszip/:id',(req,res)=>{
     .then((DBres)=>{
         console.log(DBres.length)
         let zip = pako.gzip(new Uint8Array(DBres))
+        console.log(Buffer(zip).length)
         res.send(zip)
     })
 })
@@ -134,6 +135,9 @@ router.get('/descargarinforme/:file',(req,res)=>{
     res.download(`./informes/${req.params.file}`,`${req.params.file}.pdf`)
 })
 
+router.get('/descargarinformever/:file',(req,res)=>{
+    res.send(`./informes/${req.params.file}`,`${req.params.file}.pdf`)
+})
 
 router.get('/visorexterno/:token',(req,res)=>{
     mysqldb.externo(req.params.token)
