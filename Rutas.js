@@ -128,6 +128,8 @@ router.get('/descargarinforme/:file',(req,res)=>{
 })
 
 router.get('/descargarinformever/:file',(req,res)=>{
+    //let inf = fs.readFileSync(`./informes/${req.params.file}`)
+    res.contentType("application/pdf")
     res.sendfile(`./informes/${req.params.file}`)
 })
 
