@@ -129,8 +129,9 @@ router.get('/descargarinforme/:file',(req,res)=>{
 })
 
 router.get('/descargarinformever/:file',(req,res)=>{
+    let file = req.params.file.split(".")[0]
     res.contentType("application/pdf")
-    res.sendfile(`./informes/${req.params.file}`)
+    res.sendfile(`./informes/${file}`)
 })
 
 router.get('/visorexterno/:token',(req,res)=>{
