@@ -29,13 +29,6 @@ const transporter = nodemailer.createTransport({
     //}
 });
 
-
-router.all("/",(req,res)=>{
-    console.log("ingreso")
-    console.log(req)
-    res.send("Fuera de aqui")
-})
-
 router.post('/login',(req,res)=>{
     db.login(req.body)
     .then((dbres)=>{
@@ -114,7 +107,6 @@ router.get('/getfileszip/:id',(req,res)=>{
     .then((DBres)=>{
         console.log(DBres.length)
         let zip = pako.gzip(new Uint8Array(DBres))
-        console.log(Buffer(zip).length)
         res.send(zip)
     })
 })
@@ -136,7 +128,7 @@ router.get('/descargarinforme/:file',(req,res)=>{
 })
 
 router.get('/descargarinformever/:file',(req,res)=>{
-    res.send(`./informes/${req.params.file}`,`${req.params.file}.pdf`)
+    res.sendfile(`./informes/${req.params.file}`,`${req.params.file}.pdf`)
 })
 
 router.get('/visorexterno/:token',(req,res)=>{
