@@ -84,6 +84,7 @@ router.post('/cargarInforme',upload.any(), (req,res)=>{
        let estudio = JSON.parse(req.body.estudio)
        let fechasubida = req.body.fechasubida
        let informe = req.files[0]
+       console.log(informe)
        db.guardarinforme(informe,estudio,fechasubida)
        res.json({estado:true})
 })
@@ -130,7 +131,7 @@ router.get('/descargarinforme/:file',(req,res)=>{
 router.get('/descargarinformever/:file',(req,res)=>{
     //let inf = fs.readFileSync(`./informes/${req.params.file}`)
     res.contentType("application/pdf")
-    res.sendfile(`./informes/${req.params.file}`)
+    res.send(Buffer(`./informes/${req.params.file}`))
 })
 
 router.get('/visorexterno/:token',(req,res)=>{
