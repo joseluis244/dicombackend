@@ -130,7 +130,7 @@ router.get('/descargarinforme/:file',(req,res)=>{
 
 router.get('/descargarinformever/:file',(req,res)=>{
     res.contentType("application/pdf")
-    res.sendfile(`./informes/${req.params.file}`)
+    res.sendfile(`./informes/${req.params.file}.pdf`)
 })
 
 router.get('/visorexterno/:token',(req,res)=>{
