@@ -140,4 +140,14 @@ router.get('/visorexterno/:token',(req,res)=>{
         res.json(Fres)
     })
 })
+
+router.get("/medibook/:id/:date",(req,res)=>{
+    let id = req.params.id
+    let date = req.params.date
+    mysqldb.medibook(id)
+    .then(sqlres=>{
+        console.log(sqlres)
+        res.send(sqlres)
+    })
+})
 module.exports = router

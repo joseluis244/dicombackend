@@ -187,3 +187,17 @@ module.exports.externo = async function externo(token){
         }
     })
 }
+
+module.exports.medibook = async function medibook(id){
+    let con = mysql.createConnection(condata);
+    return new Promise((Pres,Prej)=>{
+        let query = `select  PATID.id as ID, FECHA.value as FECHA 
+        from medicaltec.MainDicomTags PATID 
+        join medicaltec.MainDicomTags FECHA on PATID.id = FECHA.id
+        where PATID.tagGroup=16 and PATID.tagElement=32 and PATID.value=${id} and FECHA.tagGroup=8 and FECHA.tagElement=32`
+        con.connect()
+        con.query(query,(err,sqlres)=>{
+            Pres({estado:true,estudio:sqlres})
+        })
+    })
+}
