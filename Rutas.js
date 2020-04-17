@@ -147,6 +147,10 @@ router.get("/medibook/:id/:date",(req,res)=>{
     mysqldb.medibook(id)
     .then(sqlres=>{
         if(sqlres.estado){
+            let estudio = sqlres.estudio
+            for(let i = 0 ; i <= estudio.length-1 ; i++){
+                console.log(estudio[0].FECHA)
+            }
             res.send(sqlres.estudio)
         }
     })
