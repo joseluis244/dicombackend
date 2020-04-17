@@ -6,7 +6,7 @@ require('dotenv').config()
 const mensaje = require('./generarcorreo');
 const mysqldb = require('./mysqldb');
 const pako = require("pako")
-const fs = require('fs')
+const jwt = require('jsonwebtoken')
 const multer  = require('multer')
 
 const upload = multer({ dest: 'informes/' })
@@ -150,6 +150,7 @@ router.get("/medibook/:id/:date",(req,res)=>{
             let estudio = sqlres.estudio
             let envio = false
             let estudioEnvio = {}
+            let token = ""
             for(let i = 0 ; i <= estudio.length-1 ; i++){
                 let FechaTest = parseInt(estudio[0].FECHA)
                 if(FechaTest >= date){
@@ -158,7 +159,10 @@ router.get("/medibook/:id/:date",(req,res)=>{
                     break;
                 }
             }
-            res.json({encontrado:envio,estudio:estudioEnvio})
+            if(envio){
+                token = jwt.sign({ID:estudioEnvio.ID},'Medicaltec3101',{expiresIn:'48h'})
+            }
+            res.json({encontrado:envio,token:token})
         }
     })
 })
