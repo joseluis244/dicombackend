@@ -146,8 +146,9 @@ router.get("/medibook/:id/:date",(req,res)=>{
     let date = req.params.date
     mysqldb.medibook(id)
     .then(sqlres=>{
-        console.log(sqlres)
-        res.send(sqlres)
+        if(sqlres.estado){
+            res.send(sqlres.estudio)
+        }
     })
 })
 module.exports = router
