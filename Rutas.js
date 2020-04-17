@@ -143,15 +143,22 @@ router.get('/visorexterno/:token',(req,res)=>{
 
 router.get("/medibook/:id/:date",(req,res)=>{
     let id = req.params.id
-    let date = req.params.date
+    let date = parseInt(req.params.date)
     mysqldb.medibook(id)
     .then(sqlres=>{
         if(sqlres.estado){
             let estudio = sqlres.estudio
+            let envio = false
+            let estudioEnvio = {}
             for(let i = 0 ; i <= estudio.length-1 ; i++){
-                console.log(parseInt(estudio[0].FECHA))
+                let FechaTest = parseInt(estudio[0].FECHA)
+                if(FechaTest >= date){
+                    envio = true
+                    estudioEnvio=estudio[i]
+                    break;
+                }
             }
-            res.send(sqlres.estudio)
+            res.json({encontrado:envio,estudio:estudioEnvio})
         }
     })
 })
