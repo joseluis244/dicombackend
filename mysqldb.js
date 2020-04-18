@@ -199,5 +199,6 @@ module.exports.medibook = async function medibook(id){
         con.query(query,(err,sqlres)=>{
             Pres({estado:true,estudio:sqlres})
         })
+        con.end()
     })
 }
