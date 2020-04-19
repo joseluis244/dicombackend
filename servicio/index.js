@@ -11,10 +11,10 @@ app.use(express.urlencoded())
 app.use(express.json())
 
 app.get("/",(req,res)=>{
-    res.sendfile("./servicio/vistas/index.html")
+    res.sendfile("./vistas/index.html")
 })
 app.get("/:html.html",(req,res)=>{
-    res.sendfile(`./servicio/vistas/${req.params.html}.html`)
+    res.sendfile(`./vistas/${req.params.html}.html`)
 })
 app.post("/crearusuario",async (req,res)=>{
     let Nusuario = new Usuario(req.body)
