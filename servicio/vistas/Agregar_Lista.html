@@ -1,0 +1,115 @@
+<style>
+    .Centrado {
+        height: 100%;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        margin-left: 10px;
+        margin-right: 10px;
+        flex-direction: column;
+    }
+
+    .Centrado .AreaTrabajo {
+        width: 100%;
+    }
+
+    .Centrado .AreaTrabajo .GridForm {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+</style>
+
+<body>
+    <div class="ContenedorVista">
+        <div class="Centrado">
+            <h2>Agregar a Lista</h2>
+            <div class="alert alert-danger NoError" role="alert">
+                Error al crear Ususario
+            </div>
+            <div class="AreaTrabajo">
+                <form class="GridForm" method="POST">
+                    <div class="Datos">
+                        <div class="form-group">
+                            <label for="NombreUsuario">Nombre</label>
+                            <input name="nombre" type="text" class="form-control" id="NombreUsuario"
+                                aria-describedby="NombreUsuario1">
+                            <small id="NombreUsuario1" class="form-text text-muted">Nombres y apellidos del
+                                Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="AreaUsuario">Area</label>
+                            <input name="area" type="text" class="form-control" id="Area" aria-describedby="Area1">
+                            <small id="Area1" class="form-text text-muted">Area de trabajo.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="PrefijoUsuario">Prefijo</label>
+                            <input name="prefijo" type="tel" class="form-control" id="PrefijoUsuario"
+                                aria-describedby="PrefijoUsuario1">
+                            <small id="PrefijoUsuario1" class="form-text text-muted">Codigo de pais.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="TelefonoUsuario">Telefono</label>
+                            <input name="telefono" type="tel" class="form-control" id="TelefonoUsuario"
+                                aria-describedby="TelefonoUsuario1">
+                            <small id="TelefonoUsuario1" class="form-text text-muted">Telefono del Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="CorreoUsuario">Correo</label>
+                            <input name="correo" type="text" class="form-control" id="CorreoUsuario"
+                                aria-describedby="CorreoUsuario1">
+                            <small id="CorreoUsuario1" class="form-text text-muted">Correo del Usuario.</small>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function comprobar(){
+            if(
+                usuarioLista.nombre == "" ||
+                usuarioLista.area == "" ||
+                usuarioLista.correo == "" ||
+                usuarioLista.prefijo == "" ||
+                usuarioLista.telefono == ""
+            ){
+                return false;
+            }else{
+                return true;
+            }
+        }
+        async function enviar(){
+            let metodo = {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(usuarioLista), // data can be `string` or {object}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            let req =await fetch("/agregarlista", metodo)
+            let res = await req.json()
+            console.log(res)
+        }
+        $(".form-control").keyup((e)=>{
+            usuarioLista[e.target.name]=e.target.value
+        });
+        $(".GridForm").submit((e)=>{
+            e.preventDefault()
+            e.stopPropagation()
+            if(comprobar()){
+                enviar()
+            }else{
+                $(".alert-danger").removeClass("NoError")
+                setTimeout(() => {
+                    $(".alert-danger").addClass("NoError")
+                }, 3000);
+            }
+        });
+    </script>
+</body>

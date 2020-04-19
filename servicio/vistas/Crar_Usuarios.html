@@ -1,0 +1,153 @@
+<style>
+    .Centrado {
+        height: 100%;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        margin-left: 10px;
+        margin-right: 10px;
+        flex-direction: column;
+    }
+
+    .Centrado .AreaTrabajo {
+        width: 100%;
+    }
+
+    .Centrado .AreaTrabajo .GridForm {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+</style>
+
+<body>
+    <div class="ContenedorVista">
+        <div class="Centrado">
+            <h2>Registro de Usuario</h2>
+            <div class="alert alert-danger NoError" role="alert">
+                Error al crear Ususario
+            </div>
+            <div class="AreaTrabajo">
+                <form class="GridForm" id="RegForm" method="POST">
+                    <div class="Datos">
+                        <div class="form-group">
+                            <label for="NombreUsuario">Nombre</label>
+                            <input name="NOMBRE" type="text" class="form-control DATOS" id="NombreUsuario"
+                                aria-describedby="NombreUsuario1">
+                            <small id="NombreUsuario1" class="form-text text-muted">Nombre del Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="ApellidosUsuario">Apellidos</label>
+                            <input name="APELLIDO" type="text" class="form-control DATOS" id="ApellidosUsuario"
+                                aria-describedby="ApellidosUsuario1">
+                            <small id="ApellidosUsuario1" class="form-text text-muted">Apellidos del Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="TelefonoUsuario">Telefono</label>
+                            <input name="TELEFONO" type="tel" class="form-control DATOS" id="TelefonoUsuario"
+                                aria-describedby="TelefonoUsuario1">
+                            <small id="TelefonoUsuario1" class="form-text text-muted">Telefono del Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="CorreoUsuario">Correo</label>
+                            <input name="CORREO" type="text" class="form-control DATOS" id="CorreoUsuario"
+                                aria-describedby="CorreoUsuario1">
+                            <small id="CorreoUsuario1" class="form-text text-muted">Correo del Usuario.</small>
+                        </div>
+                    </div>
+                    <div class="Login">
+                        <div class="form-group">
+                            <label for="USERUsuario">Nombre Usuario</label>
+                            <input name="USUARIO" type="text" class="form-control LOGIN" id="USERUsuario"
+                                aria-describedby="USERUsuario1">
+                            <small id="USERUsuario1" class="form-text text-muted">Login del Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="PasswordUsuario">Password</label>
+                            <input name="PASSWORD" type="password" class="form-control LOGIN" id="PasswordUsuario"
+                                aria-describedby="PasswordUsuario1">
+                            <small id="PasswordUsuario1" class="form-text text-muted">Correo del Usuario.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="RePasswordUsuario">Re-Password</label>
+                            <input type="password" class="form-control" id="RePasswordUsuario"
+                                aria-describedby="RePasswordUsuario1">
+                            <small id="RePasswordUsuario1" class="form-text text-muted">Correo del Usuario.</small>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="Listable">
+                            <label class="form-check-label" for="Listable">
+                                Lista de clientes
+                            </label>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: flex-start;">
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function correcto(){
+            if(
+                usuario.DATOS.NOMBRE === "" ||
+                usuario.DATOS.APELLIDO === "" ||
+                usuario.DATOS.TELEFONO === "" ||
+                usuario.DATOS.CORREO === ""
+            ){
+                return(false)
+            }
+            else{return(true)}
+        }
+        async function enviar() {
+            console.log(usuario)
+            let metodo = {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(usuario), // data can be `string` or {object}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            let req = await fetch("/crearusuario", metodo)
+            let res = await req.json()
+            console.log(res)
+        }
+        document.getElementById("RegForm").addEventListener("submit", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            if (document.getElementById("PasswordUsuario").value != document.getElementById("RePasswordUsuario")
+                .value || !(document.getElementById("PasswordUsuario").value !== "")) {
+                $(".alert-danger").removeClass("NoError")
+                setTimeout(() => {
+                    $(".alert-danger").addClass("NoError")
+                }, 3000);
+
+            } else {
+                if(correcto()){
+                    enviar(usuario)
+                }else{
+                    $(".alert-danger").removeClass("NoError")
+                setTimeout(() => {
+                    $(".alert-danger").addClass("NoError")
+                }, 3000);
+                }
+            }
+        })
+        $(".DATOS").keyup((e) => {
+            usuario.DATOS[e.target.name] = e.target.value
+            if (e.target.name === "CORREO") {
+                document.getElementById("USERUsuario").value = e.target.value
+                usuario.LOGIN.USUARIO = e.target.value
+            }
+        });
+        $(".LOGIN").keyup((e) => {
+            usuario.LOGIN[e.target.name] = e.target.value
+        });
+        $("#Listable").click((e) => {
+            usuario.CONFIGURACION.LISTABLE = e.target.checked
+        });
+    </script>
+</body>
