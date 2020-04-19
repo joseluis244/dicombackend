@@ -9,12 +9,27 @@
     <ul>
         <li>
             <span>Espacio Usado:</span>
-            <span>######</span>
+            <span>
+                <div class="progress" style="width: 250px;">
+                    <div id="DiskSpaceGrafico" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span id="DiskSpaceLiteral">0%</span>
+            </span>
         </li>
         <li>
             <span>Cantidad de Estudios:</span>
             <span>######</span>
         </li>
     </ul>
+    <script>
+        async function getsize(){
+            let req = await fetch("/getspace")
+            let res = await req.json()
+            $("#DiskSpaceGrafico").css("width",`${res.uso}%`)
+            $("#DiskSpaceLiteral").html(`${res.uso}%`)
+            console.log(res.uso)
+        };
+        getsize()
+    </script>
 </body>
 </html>
