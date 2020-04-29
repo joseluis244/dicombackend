@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEY</title>
+    <style>
+        body {
+            margin: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+        }
+        .invisible{
+            display: none;
+        }
+        .Logo{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="Logo">
+                    <img src="/administracion/IMG/Logo.png" alt="Logo" width="300" height="300">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Colocar llave</label>
+                    <input type="file" class="form-control-file" id="loadkey" accept=".key">
+                </div>
+            </form>
+            <button type="button" class="btn btn-primary" id="Cargarllave">Enviar</button>
+            <div class="alert alert-danger invisible" role="alert">
+                Error al cargar llave
+            </div>
+        </div>
+    </div>
+    <script>
+        let token
+        $("#loadkey").change((e)=>{
+            token=e.target.files[0]
+        })
+        $("#Cargarllave").click(async ()=>{
+            let FD = new FormData()
+            FD.append("Key",token)
+            let metodos = {
+                method: 'POST',
+                body: FD
+            };
+            let req = await fetch(`/administracion/loadtoken/`,metodos)
+            let res = await req.json()
+            if(res.valido){
+                window.localStorage.setItem("KeyMed",res.token)
+                window.localStorage.setItem("KeyMedUser",JSON.stringify(res.data.usuario))
+                alert("Bienvenido")
+                window.location.reload()
+            }else{
+                $(".alert").removeClass("invisible")
+                $("#loadkey").val("")
+                setTimeout(()=>{
+                    $(".alert").addClass("invisible")
+                },2000)
+            }
+        });
+    </script>
+</body>
+
+</html>

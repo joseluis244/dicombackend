@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<style>
+    ::-webkit-scrollbar {
+        width: 5px;
+      }
+      /* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(33, 66, 104); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
+  }
+</style>
+<style>
+    #bastidor {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+
+    #bastidor .BoxMain {
+        border: 1px solid #dee2e6;
+        border-top: none;
+        height: calc(100% - 40px);
+        box-sizing: border-box;
+        padding: 10px;
+        overflow-y: auto;
+    }
+    #bastidor .BoxMain .TituloGrafica{
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    
+    <div id="bastidor">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+              <img src="/administracion/IMG/logomedicaltecNL.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+              Bootstrap
+            </a>
+            <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#Dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#Usuarios">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#Estudios">Estudios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#Difucion">Difucion</a>
+                  </li>
+              </ul>
+          </nav>
+        <div class="BoxMain">
+            
+        </div>
+    </div>
+</body>
+    <script>
+        let SubContenido = "Dashboard"
+        window.location.hash = SubContenido
+        AgregarContenido()
+        window.onhashchange=AgregarContenido
+        async function AgregarContenido(){
+            let req = await fetch(`/administracion/SubContenido/${SubContenido}`)
+            let res = await req.text()
+            $(".BoxMain").html(res)
+        }
+    </script>
+</html>

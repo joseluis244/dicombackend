@@ -23,10 +23,6 @@ const transporter = nodemailer.createTransport({
             clientSecret: 'BkBnu-R9Yk88Rh7SQSga0A-U',
             refreshToken: '1//041s8Get3Yo0UCgYIARAAGAQSNwF-L9IrSQbn4FBAzfikUbeU1ci0sNaUpQaeQlTAKwStqbOMU8SSDlIGJHsNF02oWrBAvf4zObw'
         }
-    //auth:{
-    //    user:'jose.camacho@medicaltecsrl.com',
-    //    pass:'Camachomm310188'
-    //}
 });
 
 router.post('/login',(req,res)=>{
