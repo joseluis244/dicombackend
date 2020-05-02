@@ -5,6 +5,7 @@ let usuarios = new Schema({
     DATOS:  {
         NOMBRE:String,
         APELLIDO:String,
+        PREFIJO:{type:Number, default:591},
         TELEFONO:Number,
         CORREO:String
     },

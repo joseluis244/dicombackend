@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .removeBtn{
+        margin-left: 5px;
+    }
+    .modalaBtn {
+        width: 50px;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm col-xl-3">
+                <h2>Registro de usuario</h2>
+                <!--//////////////////////////////////////////registro de usuario-->
+                <form id="CrearUsuario">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nombres</label>
+                        <input type="text" class="UserForm form-control" id="exampleInputEmail1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail2">Apellidos</label>
+                        <input type="text" class="UserForm form-control" id="exampleInputEmail2">
+                    </div>
+                    <div class="form-group">
+                        <label for="Telefono">Prefijo</label>
+                        <input type="tel" class="UserForm form-control" id="Telefono" placeholder="591">
+                    </div>
+                    <div class="form-group">
+                        <label for="Telefono">Telefono</label>
+                        <input type="tel" class="UserForm form-control" id="Telefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail3">Correo</label>
+                        <input type="email" class="UserForm form-control" id="exampleInputEmail3" aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="UserForm form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Difucion?</label>
+                      </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <!--//////////////////////////////////////////lista de usuario-->
+            <div class="col-sm col-xl-9">
+                <h2>Lista usuario</h2>
+                <ul class="list-group">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--//////////////////////////////////////////MODAL de usuario-->
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Eliminacion de usuario</h5>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modalaBtn btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="modalaBtn btn btn-primary" id="ModalBtn">Si</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validardatos(){
+            let validado = true
+            let control = document.getElementsByClassName("form-control")
+            for(let i = 0 ; i<control.length ;i++){
+                if(control[i].value.length<3){
+                    validado=false
+                }
+            }
+            if(validado){
+                return true
+            }else{
+                return false
+            }
+        }
+        function reset(e){
+            $('#ModalBtn').attr("usuario", e)
+            $('#ModalBtn').attr("id","ModalBtnR")
+            $(".modal-body").html("Se enviara un correo electronico para reiniciar la clave")
+            $('#staticBackdrop').modal("show")
+            $('#ModalBtnR').click(async () => {
+                console.log("actualizado")
+                $('#ModalBtnR').attr("id","ModalBtn")
+                $('#staticBackdrop').modal("hide")
+            })
+        }
+        async function eliminar(e) {
+            $('#ModalBtn').attr("usuario", e)
+            $('#ModalBtn').attr("id","ModalBtnD")
+            $(".modal-body").html("Esta seguro que decea eliminar el usuario?")
+            $('#staticBackdrop').modal("show")
+            $('#ModalBtnD').click(async () => {
+                let metodo = {method: 'DELETE',headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({id:e})
+                }
+                let req = await fetch("./usuario",metodo)
+                let res = await req.json()
+                CrearLista()
+                $('#ModalBtnD').attr("id","ModalBtn")
+                $('#staticBackdrop').modal("hide")
+            })
+        }
+
+        async function CrearLista() {
+            let ListaUsuariosREQ = await fetch("./listausuarios")
+            let ListaUsuarios = await ListaUsuariosREQ.json()
+            $(".list-group").html("")
+            for (let i = 0; i < ListaUsuarios.length; i++) {
+                let ItemList = document.createElement("LI");
+                let BtnEliminar = document.createElement("button")
+                let BtnReset = document.createElement("button")
+                let BtnCont = document.createElement("div")
+                $(ItemList).addClass("list-group-item d-flex justify-content-between align-items-center")
+                $(ItemList).html(`${ListaUsuarios[i].DATOS.NOMBRE} ${ListaUsuarios[i].DATOS.APELLIDO}`)
+                $(BtnEliminar).addClass("btn btn-secondary btn-sm removeBtn")
+                $(BtnEliminar).html(`Eliminar`)
+                $(BtnEliminar).attr('onClick', `eliminar("${ListaUsuarios[i]._id}");`);
+                $(BtnReset).addClass("btn btn-primary btn-sm")
+                $(BtnReset).html(`Reset`)
+                $(BtnReset).attr('onClick', `reset("${ListaUsuarios[i]._id}");`);
+                $(BtnCont).append(BtnReset)
+                $(BtnCont).append(BtnEliminar)
+                $(ItemList).append(BtnCont)
+                document.querySelector(".list-group").appendChild(ItemList)
+            }
+        }
+        async function inicio() {
+            class usuario {
+                constructor() {
+                    this.DATOS = {
+                        "NOMBRE": "",
+                        "APELLIDO": "",
+                        "PREFIJO": "",
+                        "TELEFONO": "",
+                        "CORREO": ""
+                    };
+                    this.LOGIN = {
+                        "USUARIO": "",
+                        "PASSWORD": "Usuario244"
+                    };
+                    this.CONFIGURACION = {
+                        "LISTABLE": false,
+                        "RESTRINGIDO": false,
+                        "TIPO": "usuario",
+                        "ESTADO": "activo",
+                        "FECHACREACION": new Date(),
+                    }
+                }
+                asignar(datos){
+                    this.DATOS.NOMBRE = datos[0].value
+                    this.DATOS.APELLIDO = datos[1].value
+                    this.DATOS.PREFIJO = datos[2].value
+                    this.DATOS.TELEFONO = datos[3].value
+                    this.DATOS.CORREO = datos[4].value
+                    this.LOGIN.USUARIO = datos[4].value
+                    this.CONFIGURACION.LISTABLE = datos[5].checked
+                }
+            };
+        CrearLista()
+        var NuevoUsuario = new usuario()
+        $("#CrearUsuario").submit(async (e) => {
+            e.preventDefault()
+            if(validardatos()){
+                $(".EsperaCarga").show(1000);
+                NuevoUsuario.asignar(document.getElementsByClassName("UserForm"))
+                let metodo = {method: 'PUT',headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(NuevoUsuario)
+                }
+                let req = await fetch("./usuario",metodo)
+                let res = await req.json()
+                if(!res.save){
+                    alert(`error al guardar Datos(${res.error})`)
+                }else{
+                    CrearLista()
+                }
+                $(".EsperaCarga").hide(1000);
+            }else{
+                alert("Datos Insuficientes")
+            }
+        })
+        $(".EsperaCarga").hide(1000);
+        }
+        inicio()
+    </script>
+</body>
+
+</html>

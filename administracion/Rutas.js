@@ -6,6 +6,7 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 const subrutas = require("./Subfiles")
 const estadisticas = require("./estadisticas")
+const mongoDB = require("./mongo")
 
 
 router.use(express.static("./administracion/estaticos/"))
@@ -44,7 +45,41 @@ router.get("/SubContenido/:ruta",(req,res)=>{
 })
 
 router.get("/estadisticas",(req,res)=>{
-    estadisticas()
+    estadisticas.Dashboard()
+    .then((DB)=>{
+        res.json(DB)
+    })
+})
+
+router.get("/listausuarios",(req,res)=>{
+    mongoDB.ListaUsuarios()
+    .then((DB)=>{
+        res.json(DB)
+    })
+})
+/////////////////////////////USUARIOS///////////////////////
+router.put("/usuario",(req,res)=>{
+    mongoDB.CrearUsuario(req.body)
+    .then((DB)=>{
+        res.json({save:DB,error:"Correo existente"})
+    })
+})
+router.delete("/usuario",(req,res)=>{
+    mongoDB.BorrarUsuario(req.body.id)
+    .then(()=>{
+        res.json(true)
+    })
+})
+//////////////////////////////ESTUDIOS//////////////////////////////
+router.get("/listaestudios",(req,res)=>{
+    estadisticas.ListaEstudios()
+    .then((DB)=>{
+        res.json(DB)
+    })
+})
+////////////////////Lista difucion //////////////////////////////////
+router.get("/Listadifucion",(req,res)=>{
+    mongoDB.getdifucion()
     .then((DB)=>{
         res.json(DB)
     })

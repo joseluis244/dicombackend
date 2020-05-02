@@ -1,0 +1,89 @@
+<body>
+    <div class="container-fluid">
+        <h2>Lista de Difucion</h2>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <form id="difucionForm">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nombre Completo</label>
+                        <input type="text" class="importante form-control" id="exampleInputEmail1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Area de trabajo</label>
+                        <input type="text" class="importante form-control" id="exampleInputEmail1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Correo Electronico</label>
+                        <input type="email" class="importante form-control" id="exampleInputEmail1">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Prefijo</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="591">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Numero telefonico</label>
+                        <input type="tel" class="importante form-control" id="exampleInputEmail1">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="col-xl-9 col-md-6">
+                <ul class="list-group">
+                    Cargando...
+                  </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function Registrar(){
+            let inputs = document.getElementsByClassName("form-control")
+            let control = document.getElementsByClassName("importante")
+            let flag = true
+            for(let i = 0 ; i < control.length ; i++){
+                if(control[i].value.length<5){
+                    flag=false
+                }
+            }
+            if(flag){
+                console.log("registro")
+            }else{
+                console.log("Error")
+            }
+        }
+        function eliminardifucion(e){
+            console.log(e)
+        }
+        async function CargarLista(){
+            class DificionLista{
+                constructor(data){
+                    this.item = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <div>${data.nombre} (${data.area})</div>
+                            <div>${data.correo} (+${data.prefijo}-${data.telefono})</div>
+                        </div>
+                        <div>
+                            <button onclick="eliminardifucion('${data._id}')" type="button" class="btn btn-secondary">Eliminar</button>
+                        </div>
+                    </li>`
+                }
+            }
+            let ListadifucionREQ = await fetch("./Listadifucion")
+            let Listadifucion = await ListadifucionREQ.json()
+            $(".list-group").html("")
+            for(let i = 0 ; i<Listadifucion.length ; i++){
+                let nuevoitem = new DificionLista(Listadifucion[i])
+                $(".list-group").append(nuevoitem.item)
+            }
+        }
+        async function inicio() {
+            CargarLista()
+            document.getElementById("difucionForm").addEventListener("submit",(e)=>{
+                e.preventDefault()
+                Registrar()
+            })
+            $(".EsperaCarga").hide(1000);
+        };
+        inicio()
+    </script>
+</body>

@@ -2,37 +2,31 @@
     .desenfoque{
         filter: blur(8px);
     }
-    .EsperaCarga{
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        background-color: #ffffffb4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .HistoryDiv{
+        height: 800px;
     }
-    .Spinner{
-        width: 60px;
-        height: 60px;
-        border: 15px solid black;
-        border-bottom: 15px solid #8d0000;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
+    @media screen and (max-width:1140px){
+        .HistoryDiv{
+            height: 500px;
+        }
     }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    @media screen and (max-width:576px){
+        .HistoryDiv{
+            height: 300px;
+        }
     }
 </style>
 <body>
-    <div id="DashboardMain" style="overflow-x: hidden;" class="desenfoque">
-
+    <div id="DashboardMain" class="container-fluid desenfoque">
         <!--///////////////////////////////////////-->
         <!--///////////////////////////////////////-->
         <div class="row">
-            <div class="col-sm-12 col-md-4">
+            <div class="col-md-12">
+                <h3>Dashboard</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-2">
                 <div class="TituloGrafica">Datos generales:</div>
                 <div style="display: flex; flex-direction: column; justify-content: center; height: calc(100% - 25px);">
                     <div>Cantidad de estudios: <span id="CantidadDeEstudios"></span> </div>
@@ -42,62 +36,121 @@
                       </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-6 col-lg-5">
                 <div class="TituloGrafica">Estudios por Modalidad (Dia)</div>
                 <div>
-                    <canvas id="myChart12"></canvas>
+                    <canvas id="EstudioModDia"></canvas>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-6 col-lg-5">
                 <div class="TituloGrafica">Estudios por Maquina (Dia)</div>
                 <div>
-                    <canvas id="myChart13"></canvas>
+                    <canvas id="EstudioMaquinaDia"></canvas>
                 </div>
             </div>
         </div>
         <!--///////////////////////////////////////-->
         <div class="row">
-            <div class="col-sm-12 col-md-4">
-                <div class="TituloGrafica">Estudios por Modalidad/Estudio (Mes)</div>
-                <div>
-                    <canvas id="myChart21"></canvas>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-6">
                 <div class="TituloGrafica">Estudios por Modalidad (Mes)</div>
                 <div>
-                    <canvas id="myChart22"></canvas>
+                    <canvas id="EstudioModMes"></canvas>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-6">
                 <div class="TituloGrafica">Estudios por Maquina (Mes)</div>
                 <div>
-                    <canvas id="myChart23"></canvas>
+                    <canvas id="EstudioMaquinaMes"></canvas>
                 </div>
             </div>
         </div>
         <!--///////////////////////////////////////-->
-
+        <div class="row">
+            <div class="col-12">
                 <div class="TituloGrafica">Historico pacientes 24 meses</div>
-                <div style="height: 500px;">
-                    <canvas width=500 id="myChart31"></canvas>
+                <div class="HistoryDiv">
+                    <canvas id="Estadistica24"></canvas>
                 </div>
+            </div>
+        </div>
+
+
 
         <!--///////////////////////////////////////-->
     </div>
-    <div class="EsperaCarga">
-        <div class="Spinner"></div>
-    </div>
     <script>
+        function DiagramaDona(elemento,datos,color){
+            let lab = Object.keys(datos)
+            let vals =Object.values(datos)
+            let ctx = document.getElementById(elemento).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: vals,
+                        backgroundColor: color
+                    }],
+                    labels: lab
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio:true,
+                    legend: {
+                        display: true,
+                        position:"left"
+                    }
+                }
+            });
+        }
+        function DiagramaBarra(elemento,datos){
+            let DS = []
+            for(let  i = 0; i < datos.dataset.DataSet.length; i++){
+                DS.push({
+                    label: datos.dataset.DataSet[i].label,
+                    backgroundColor:Colores[i],
+                    borderColor: Colores[i],
+                    data:datos.dataset.DataSet[i].data,
+                    fill: false,
+                })
+            }
+            let ctx = document.getElementById(elemento).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data:{
+                    labels: datos.labs,
+                    datasets: DS,
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio:false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
+                    }
+                }
+            })
+        }
         async function main(){
             let req = await fetch("/administracion/estadisticas")
             let res = await req.json()
             $("#DashboardMain").removeClass("desenfoque")
-            $(".EsperaCarga").fadeOut(1000);
+            $(".EsperaCarga").hide(1000);
             $("#CantidadDeEstudios").html(res.CantidadEstudios)
             $("#DiscoUsado").html(res.UsoDisco.toFixed(2))
             $("#progressbarDisk").width(`${res.UsoDisco.toFixed(2)}%`)
-            console.log(res)
+            DiagramaDona("EstudioModDia",res.EstudiosModalidadDia,Colores)
+            DiagramaDona("EstudioMaquinaDia",res.EstudiosMaquinasDia,Colores2)
+            DiagramaDona("EstudioModMes",res.EstudiosModalidadDia,Colores)
+            DiagramaDona("EstudioMaquinaMes",res.EstudiosMaquinasDia,Colores2)
+            DiagramaBarra("Estadistica24",res.EstudiosModalidad24)
         }
         main()
     </script>

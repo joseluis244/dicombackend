@@ -28,59 +28,100 @@
         left: 0px;
         right: 0px;
         box-sizing: border-box;
-        padding: 10px;
+        overflow-y: auto;
     }
 
     #bastidor .BoxMain {
-        border: 1px solid #dee2e6;
+        border: 1px solid #ffffff00;
         border-top: none;
-        height: calc(100% - 40px);
         box-sizing: border-box;
         padding: 10px;
-        overflow-y: auto;
     }
     #bastidor .BoxMain .TituloGrafica{
         font-weight: bold;
+    }
+    .EsperaCarga{
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        background-color: #ffffffb4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .Spinner{
+        width: 60px;
+        height: 60px;
+        border: 15px solid black;
+        border-bottom: 15px solid #8d0000;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 </style>
 
 <body>
     
     <div id="bastidor">
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="#">
-              <img src="/administracion/IMG/logomedicaltecNL.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-              Bootstrap
+              <img src="/administracion/IMG/logomedicaltecNLBlanco.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+              MedicalTec
             </a>
-            <ul class="nav">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#Dashboard">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#Usuarios">Usuarios</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#Estudios">Estudios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#Difucion">Difucion</a>
-                  </li>
-              </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item" data-toggle="collapse" data-target="#navbarNavDropdown">
+                      <a name="Dashboard" class="nav-link active" href="#Dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item" data-toggle="collapse" data-target="#navbarNavDropdown">
+                      <a name="Usuarios" class="nav-link" href="#Usuarios">Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                      <a name="Estudios" class="nav-link" href="#Estudios">Estudios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a name="Difucion" class="nav-link" href="#Difucion">Difucion</a>
+                      </li>
+                  </ul>
+            </div>
           </nav>
         <div class="BoxMain">
             
         </div>
+        <div class="EsperaCarga">
+            <div class="Spinner"></div>
+        </div>
     </div>
 </body>
     <script>
-        let SubContenido = "Dashboard"
-        window.location.hash = SubContenido
-        AgregarContenido()
+        let Colores = ["#e53d00","#ffe900","#0091EA","#311B92","#1A237E","#0D47A1","#006064","#004D40"]
+        let Colores2 = ["#21a0a0","#ffe900","#ff7f11","#448AFF","#7E57C2","#E91E63","#4FC3F7","#607D8B"]
+        let SubContenido
+        let eliminarEstudios = []
+        if(window.location.hash === ""){
+            SubContenido = "Dashboard"
+            window.location.hash = SubContenido
+        }else{
+            AgregarContenido()
+        }
         window.onhashchange=AgregarContenido
         async function AgregarContenido(){
+            SubContenido = window.location.hash.split("#")[1]
+            $(".EsperaCarga").show()
+            $(".BoxMain").html("")
+            $(".nav-link").removeClass("active")
+            $(`.nav-link[name=${SubContenido}]`).addClass("active")
             let req = await fetch(`/administracion/SubContenido/${SubContenido}`)
             let res = await req.text()
             $(".BoxMain").html(res)
-        }
+        };
     </script>
 </html>
