@@ -40,6 +40,7 @@ function CantidadEstudios(){
         let query = `SELECT * FROM medicaltec.resources where resourceType=1;`;
         con.connect((err)=>{console.log(err)});
         con.query(query,(err, res) => {
+            console.log(res)
             Pres(res.length)
         })
         //con.end()
