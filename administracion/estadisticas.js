@@ -205,7 +205,7 @@ module.exports.ListaEstudios = function(){
         where A.tagGroup=8 and A.tagElement=32 order by cast(A.value as unsigned) asc;`
         con.connect();
         con.query(query,async (err,res)=>{
-            console.log(res)
+            console.log(err)
             Pres(res)
         })
         con.end()
