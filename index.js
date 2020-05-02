@@ -20,9 +20,7 @@ https.createServer(secureserveroptios, app)
 
 app.use(cors())
 
-app.use(fileUpload({
-    createParentPath: true
-}));
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
