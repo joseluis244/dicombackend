@@ -40,7 +40,6 @@ function CantidadEstudios(){
         let query = `SELECT * FROM Resources where resourceType=1;`;
         con.connect((err)=>{console.log(err)});
         con.query(query,(err, res) => {
-            console.log(res)
             Pres(res.length)
         })
         //con.end()
@@ -206,6 +205,7 @@ module.exports.ListaEstudios = function(){
         where A.tagGroup=8 and A.tagElement=32 order by cast(A.value as unsigned) asc;`
         con.connect();
         con.query(query,async (err,res)=>{
+            console.log(res)
             Pres(res)
         })
         con.end()
