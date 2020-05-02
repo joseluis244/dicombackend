@@ -10,7 +10,6 @@ const condata = {
     password: "Medicaltec310188$",
     database: "medicaltec"
 };
-
 class Estadistica{
     constructor(){
         this.CantidadEstudios = 0;
@@ -41,6 +40,7 @@ function CantidadEstudios(){
         let query = `SELECT * FROM medicaltec.resources where resourceType=1;`;
         con.connect();
         con.query(query,(err, res) => {
+            console.log(err)
             Pres(res.length)
         })
         con.end()
