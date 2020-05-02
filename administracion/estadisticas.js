@@ -61,7 +61,7 @@ function EstudiosModalidad(inicio,fin){
     fin = parseInt(fin)
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-        let query = `SELECT RES.internalId as ID FROM medicaltec.resources RES join medicaltec.maindicomtags MD on RES.internalId = MD.id where (RES.resourceType=1 and (MD.tagGroup=8 and MD.tagElement=32)) and ( cast(MD.value as UNSIGNED) > ${inicio} and cast(MD.value as UNSIGNED) <= ${fin}) order by cast(MD.value as UNSIGNED) desc;`;
+        let query = `SELECT RES.internalId as ID FROM medicaltec.Resources RES join medicaltec.MainDicomTags MD on RES.internalId = MD.id where (RES.resourceType=1 and (MD.tagGroup=8 and MD.tagElement=32)) and ( cast(MD.value as UNSIGNED) > ${inicio} and cast(MD.value as UNSIGNED) <= ${fin}) order by cast(MD.value as UNSIGNED) desc;`;
         con.connect();
         con.query(query,async (err,res)=>{
             for (let i = 0; i < res.length; i++) {
@@ -77,7 +77,7 @@ function EstudiosModalidad(inicio,fin){
 function getModalidad(ID){
     let con = mysql.createConnection(condata);
     return new Promise (async (Pres,Prej)=>{
-        let query = `SELECT MD.value as MODAL FROM medicaltec.resources RES join medicaltec.maindicomtags MD on RES.internalId=MD.id where RES.resourceType=2 and RES.parentId = ${ID} and (MD.tagGroup=8 and MD.tagElement=96) limit 1;`;
+        let query = `SELECT MD.value as MODAL FROM medicaltec.Resources RES join medicaltec.MainDicomTags MD on RES.internalId=MD.id where RES.resourceType=2 and RES.parentId = ${ID} and (MD.tagGroup=8 and MD.tagElement=96) limit 1;`;
         con.connect();
         con.query(query,(err,res)=>{
             Pres(res[0].MODAL)
@@ -105,7 +105,7 @@ function EstudiosMaquinas(inicio,fin){
     fin = parseInt(fin)
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-        let query = `SELECT RES.internalId as ID FROM medicaltec.resources RES join medicaltec.maindicomtags MD on RES.internalId = MD.id where RES.resourceType=1 and (MD.tagGroup=8 and MD.tagElement=32) and ( cast(MD.value as UNSIGNED) > ${inicio} and cast(MD.value as UNSIGNED) <= ${fin}) order by cast(MD.value as UNSIGNED) desc;`;
+        let query = `SELECT RES.internalId as ID FROM medicaltec.Resources RES join medicaltec.MainDicomTags MD on RES.internalId = MD.id where RES.resourceType=1 and (MD.tagGroup=8 and MD.tagElement=32) and ( cast(MD.value as UNSIGNED) > ${inicio} and cast(MD.value as UNSIGNED) <= ${fin}) order by cast(MD.value as UNSIGNED) desc;`;
         con.connect();
         con.query(query,async (err,res)=>{
             for (let i = 0; i < res.length; i++) {
@@ -121,7 +121,7 @@ function EstudiosMaquinas(inicio,fin){
 function getMaquina(ID){
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-        let query = `SELECT internalId as IntID FROM medicaltec.resources where resourceType=2 and parentId=${ID} limit 1;`;
+        let query = `SELECT internalId as IntID FROM medicaltec.Resources where resourceType=2 and parentId=${ID} limit 1;`;
         con.connect();
         con.query(query,async (err,res)=>{
             let AE = await getAE(res[0].IntID)
@@ -134,7 +134,7 @@ function getMaquina(ID){
 function getAE(ID){
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-        let query = `SELECT MD.value as AE FROM medicaltec.resources RES join medicaltec.metadata MD on RES.internalId = MD.id where RES.resourceType=3 and RES.parentId=${ID} and (MD.type = 3) limit 1;`;
+        let query = `SELECT MD.value as AE FROM medicaltec.Resources RES join medicaltec.Metadata MD on RES.internalId = MD.id where RES.resourceType=3 and RES.parentId=${ID} and (MD.type = 3) limit 1;`;
         con.connect();
         con.query(query,async (err,res)=>{
             Pres(res[0].AE)
@@ -199,10 +199,10 @@ async function getResporte24(){
 module.exports.ListaEstudios = function(){
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-        let query = `select A.id as id,A.value as FECHA,C.value as NOMBRE,D.value as MODAL from medicaltec.maindicomtags A
-        join (select * from medicaltec.resources group by parentId) B on B.parentId=A.id
-        join (select * from medicaltec.maindicomtags where tagGroup=16 and tagElement=16) C on C.id=A.id
-        join (select * from medicaltec.maindicomtags where tagGroup=8 and tagElement=96) D on D.id=B.internalId
+        let query = `select A.id as id,A.value as FECHA,C.value as NOMBRE,D.value as MODAL from medicaltec.MainDicomTags A
+        join (select * from medicaltec.Resources group by parentId) B on B.parentId=A.id
+        join (select * from medicaltec.MainDicomTags where tagGroup=16 and tagElement=16) C on C.id=A.id
+        join (select * from medicaltec.MainDicomTags where tagGroup=8 and tagElement=96) D on D.id=B.internalId
         where A.tagGroup=8 and A.tagElement=32 order by cast(A.value as unsigned) asc;`
         con.connect();
         con.query(query,async (err,res)=>{
