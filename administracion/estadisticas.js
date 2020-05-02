@@ -38,7 +38,7 @@ function CantidadEstudios(){
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
         let query = `SELECT * FROM medicaltec.resources where resourceType=1;`;
-        con.connect();
+        con.connect((err)=>{console.log(err)});
         con.query(query,(err, res) => {
             console.log(err)
             Pres(res.length)
