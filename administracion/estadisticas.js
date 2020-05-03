@@ -42,7 +42,7 @@ function CantidadEstudios(){
         con.query(query,(err, res) => {
             Pres(res.length)
         })
-        //con.end()
+        con.end()
     })
 }
 
