@@ -26,10 +26,10 @@ module.exports.Dashboard = async function (){
     let respuesta = new Estadistica();
     respuesta.CantidadEstudios = await CantidadEstudios();
     respuesta.UsoDisco=await UsoDisco();
-    respuesta.EstudiosModalidadDia = await EstudiosModalidad(19000101,moment().format("YYYYMMDD"));
-    respuesta.EstudiosMaquinasDia = await EstudiosMaquinas(19000101,moment().format("YYYYMMDD"));
-    respuesta.EstudiosModalidadMes = await EstudiosModalidad(19000101,moment().format("YYYYMMDD"));
-    respuesta.EstudiosMaquinasMes = await EstudiosMaquinas(19000101,moment().format("YYYYMMDD"));
+    respuesta.EstudiosModalidadDia = await EstudiosModalidad(moment().subtract(1, 'days').format("YYYYMMDD"),moment().format("YYYYMMDD"));
+    respuesta.EstudiosMaquinasDia = await EstudiosMaquinas(moment().subtract(1, 'days').format("YYYYMMDD"),moment().format("YYYYMMDD"));
+    respuesta.EstudiosModalidadMes = await EstudiosModalidad(moment().subtract(1, 'months').format("YYYYMMDD"),moment().format("YYYYMMDD"));
+    respuesta.EstudiosMaquinasMes = await EstudiosMaquinas(moment().subtract(1, 'months').format("YYYYMMDD"),moment().format("YYYYMMDD"));
     respuesta.EstudiosModalidad24 = await getResporte24()
     return respuesta
 }
