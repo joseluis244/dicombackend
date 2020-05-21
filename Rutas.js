@@ -9,6 +9,8 @@ const pako = require("pako")
 const jwt = require('jsonwebtoken')
 const multer  = require('multer')
 
+
+
 const upload = multer({ dest: 'informes/' })
 ///////////////////////////////
 var mongoose = require('mongoose');

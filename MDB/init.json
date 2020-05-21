@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "5e84a64d21e76613f83da65d"
+  },
+  "DATOS": {
+    "NOMBRE": "admin",
+    "APELLIDO": "admin",
+    "TELEFONO": 70866119,
+    "CORREO": "JOSE.CAMACHO@MEDICALTECSRL.COM"
+  },
+  "LOGIN": {
+    "USUARIO": "admin",
+    "PASSWORD": "admin"
+  },
+  "CONFIGURACION": {
+    "LISTABLE": false,
+    "RESTRINGIDO": false,
+    "TIPO": "admin",
+    "ESTADO": "activo",
+    "FECHACREACION": {
+      "$date": "2020-04-01T14:33:49.551Z"
+    },
+    "ULTIMOACCESO": {
+      "$date": "2020-04-01T14:33:49.551Z"
+    }
+  },
+  "LISTA": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5ead89b61cfb3c0c04a90e09"
+  },
+  "DATOS": {
+    "NOMBRE": "luis",
+    "APELLIDO": "pereda",
+    "TELEFONO": 70866119,
+    "CORREO": "jose.luis244@gmail.com"
+  },
+  "LOGIN": {
+    "USUARIO": "jose.luis244@gmail.com",
+    "PASSWORD": "Usuario244"
+  },
+  "CONFIGURACION": {
+    "LISTABLE": true,
+    "RESTRINGIDO": false,
+    "TIPO": "usuario",
+    "ESTADO": "activo",
+    "FECHACREACION": {
+      "$date": "2020-05-02T14:53:55.566Z"
+    }
+  },
+  "LISTA": [],
+  "__v": 0
+}]

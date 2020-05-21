@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
+const http = require('http').createServer(app);
+const Ws = require("./Ws")(http)
 const cors = require("cors");
 const Rutas = require('./Rutas');
 const administracion = require("./administracion/Rutas")
-const fs = require("fs")
+const negatoscopio = require("./Negatoscopio/Rutas")
+//const fs = require("fs")
 //const https = require("https")
 //const https_port = 4443
 
@@ -17,7 +20,6 @@ const fs = require("fs")
 //    console.log("secure server enable")
 //})
 
-
 app.use(cors())
 
 
@@ -26,6 +28,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 app.use('/',Rutas)
 app.use('/administracion',administracion)
+app.use('/neg',negatoscopio)
+/*agregar tambien en el index pendiente*/
 
 
-app.listen(4000,()=>{console.log('Servidor activo')})
+http.listen(4000,()=>{console.log('Servidor activo')})
