@@ -8,6 +8,7 @@ const mysqldb = require('./mysqldb');
 const pako = require("pako")
 const jwt = require('jsonwebtoken')
 const multer  = require('multer')
+const request = require("request")
 
 
 
@@ -163,5 +164,13 @@ router.get("/medibook/:id/:date",(req,res)=>{
             res.json({encontrado:envio,token:token})
         }
     })
+})
+
+router.get("/DescargaEstudio/:id",(req,res)=>{
+    let server = "localhost:8042"
+    request(`http://${server}/studies/${req.params.id}/media`)
+    setTimeout(() => {
+        request(`http://${server}/studies/${req.params.id}/media`).pipe(res);
+    }, 2000);
 })
 module.exports = router

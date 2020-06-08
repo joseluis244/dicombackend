@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "check-disk-space": "^2.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -21,6 +22,7 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.3",
     "pako": "^1.0.11",
+    "request": "^2.88.2",
     "socket.io": "^2.3.0",
     "ws": "^7.2.5"
   }

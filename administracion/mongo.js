@@ -33,3 +33,8 @@ module.exports.getdifucion = async ()=>{
 let difucion = await Difucion.find()
 return difucion
 }
+module.exports.WriteDifucion = async (data)=>{
+    console.log(data)
+    let Nuevo = new Difucion()
+    console.log(Nuevo)
+}

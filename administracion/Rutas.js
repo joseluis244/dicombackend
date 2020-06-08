@@ -84,5 +84,9 @@ router.get("/Listadifucion",(req,res)=>{
         res.json(DB)
     })
 })
+router.post("/WriteDifucion",(req,res)=>{
+    console.log(req.body)
+    res.json(true)
+})
 
 module.exports = router
