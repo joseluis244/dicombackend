@@ -20,20 +20,32 @@
 
         </ul>
         <div style="margin-top: 20px;">
-            <button type="button" class="btn btn-danger">Eliminar</button>
+            <button onclick="Eliminar()" type="button" class="btn btn-danger">Eliminar</button>
         </div>
     </div>
     <script>
-        eliminarEstudios=[]
-        function SeleccionarEliminacion(ID,e){
-            if(e.checked){
-                eliminarEstudios.push(ID)
-            }else{
-                eliminarEstudios.splice(eliminarEstudios.indexOf(ID),1)
+        eliminarEstudios = []
+        async function Eliminar() {
+            let opciones = {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify({lista:eliminarEstudios}), // data can be `string` or {object}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
-            console.log(eliminarEstudios)
+            let req = await fetch("./eliminarestudios",opciones)
+            let res = await req.json()
+            console.log(res)
         }
-        async function cargarLista(ItemLista){
+
+        function SeleccionarEliminacion(ID, e) {
+            if (e.checked) {
+                eliminarEstudios.push(ID)
+            } else {
+                eliminarEstudios.splice(eliminarEstudios.indexOf(ID), 1)
+            }
+        }
+        async function cargarLista(ItemLista) {
             let EstudiosREQ = await fetch("./listaestudios")
             let Estudios = await EstudiosREQ.json()
             for (let i = 0; i < Estudios.length; i++) {
@@ -52,7 +64,7 @@
                         </div>
                         <div>
                             <div class="form-group form-check">
-                                <input onClick="SeleccionarEliminacion(${data.id},this)" type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <input onClick="SeleccionarEliminacion('${data.UID}',this)" type="checkbox" class="form-check-input" id="exampleCheck1">
                               </div>
                         </div>
                     </li>`

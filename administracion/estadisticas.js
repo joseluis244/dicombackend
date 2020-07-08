@@ -198,14 +198,36 @@ async function getResporte24(){
 module.exports.ListaEstudios = function(){
     let con = mysql.createConnection(condata);
     return new Promise ((Pres,Prej)=>{
-        let query = `select A.id as id,A.value as FECHA,C.value as NOMBRE,D.value as MODAL from medicaltec.MainDicomTags A
+        /*let query = `select A.id as id,A.value as FECHA,C.value as NOMBRE,D.value as MODAL from medicaltec.MainDicomTags A
         join (select * from medicaltec.Resources group by parentId) B on B.parentId=A.id
         join (select * from medicaltec.MainDicomTags where tagGroup=16 and tagElement=16) C on C.id=A.id
         join (select * from medicaltec.MainDicomTags where tagGroup=8 and tagElement=96) D on D.id=B.internalId
-        where A.tagGroup=8 and A.tagElement=32 order by cast(A.value as unsigned) asc;`
+        where A.tagGroup=8 and A.tagElement=32 order by cast(A.value as unsigned) asc;`*/
+        let query = `SELECT B.id as id, A.publicId as UID, B.value as NOMBRE, C.value as FECHA FROM medicaltec.Resources A
+        left join (select * from medicaltec.MainDicomTags where tagGroup=16 and tagElement=16) B on A.internalId = B.id
+        left join (select * from medicaltec.MainDicomTags where tagGroup=8 and tagElement=32) C on A.internalId = C.id
+        where A.resourceType=1 order by C.value asc;`
         con.connect();
         con.query(query,async (err,res)=>{
-            console.log(err)
+            for (let index = 0; index < res.length; index++) {
+                const element = res[index].id;
+                let MODAL = await getModalidades(element)
+                res[index].MODAL = MODAL[0].MODAL
+            }
+            Pres(res)
+        })
+        con.end()
+    })
+}
+
+async function getModalidades(id){
+    return new Promise ((Pres,Prej)=>{
+        let con = mysql.createConnection(condata);
+        let query = `select B.value as MODAL from medicaltec.Resources A
+        left join (select * from medicaltec.MainDicomTags where tagGroup=8 and tagElement=96) B on A.internalId=B.id
+        where A.resourceType=2 and A.parentId=${id} limit 1;`
+        con.connect();
+        con.query(query,(err,res)=>{
             Pres(res)
         })
         con.end()

@@ -7,6 +7,7 @@ const upload = multer({ storage: storage })
 const subrutas = require("./Subfiles")
 const estadisticas = require("./estadisticas")
 const mongoDB = require("./mongo")
+const Axios = require('axios')
 
 
 router.use(express.static("./administracion/estaticos/"))
@@ -76,6 +77,17 @@ router.get("/listaestudios",(req,res)=>{
     .then((DB)=>{
         res.json(DB)
     })
+})
+
+router.post("/eliminarestudios",async (req,res)=>{
+    let lista = req.body.lista
+    if(lista.length > 0){
+        for (let index = 0; index < lista.length; index++) {
+            const element = array[index];
+            await Axios.delete("http://45.56.122.37:8042/studies/"+element)
+        }
+    }
+    res.send(true)
 })
 ////////////////////Lista difucion //////////////////////////////////
 router.get("/Listadifucion",(req,res)=>{
