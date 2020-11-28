@@ -9,8 +9,8 @@ const pako = require("pako")
 const jwt = require('jsonwebtoken')
 const multer  = require('multer')
 const request = require("request")
-
-
+const fs = require("fs")
+const conf = JSON.parse( fs.readFileSync("./conf.json").toString() )
 
 const upload = multer({ dest: 'informes/' })
 ///////////////////////////////
@@ -63,7 +63,7 @@ router.post('/sharecorreo',(req,res)=>{
     let titulo = `Estudio:${nombre} - ${modalidad} ${fecha}`
     let datos = req.body.data
     var mailOptions = {
-        from: 'MedicalTec SRL',
+        from: conf.Remitente,
         to: destinatario,
         subject: titulo,
         html: mensaje.mail(datos,modalidad,nombre)
@@ -140,7 +140,7 @@ router.get('/visorexterno/:token',(req,res)=>{
     })
 })
 
-router.get("/medibook/:id/:date",(req,res)=>{
+/*router.get("/medibook/:id/:date",(req,res)=>{
     let id = req.params.id
     let date = parseInt(req.params.date)
     mysqldb.medibook(id)
@@ -164,7 +164,7 @@ router.get("/medibook/:id/:date",(req,res)=>{
             res.json({encontrado:envio,token:token})
         }
     })
-})
+})*/
 
 router.get("/DescargaEstudio/:id",(req,res)=>{
     let server = "localhost:8042"

@@ -7,15 +7,20 @@ const fs = require("fs")
 const https = require("https")
 const https_port = 4443
 
-const secureserveroptios = {
-    key:fs.readFileSync("/var/www/html/medpacs/ssl/private.key"),
-    cert:fs.readFileSync("/var/www/html/medpacs/ssl/certificate.crt")
+const conf = JSON.parse( fs.readFileSync("./conf.json").toString() )
+
+
+if(conf.Seguro){
+    const secureserveroptios = {
+        key:fs.readFileSync("/var/www/html/medpacs/ssl/private.key"),
+        cert:fs.readFileSync("/var/www/html/medpacs/ssl/certificate.crt")
+    }
+    https.createServer(secureserveroptios, app)
+    .listen(https_port,()=>{
+        console.log("secure server enable")
+    })
 }
 
-https.createServer(secureserveroptios, app)
-.listen(https_port,()=>{
-    console.log("secure server enable")
-})
 
 
 app.use(cors())

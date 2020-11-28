@@ -173,8 +173,9 @@ module.exports.externo = async function externo(token){
             FROM medicaltec.MainDicomTags fecha 
             JOIN medicaltec.MainDicomTags nombre ON nombre.id = fecha.id 
             JOIN medicaltec.MainDicomTags sexo ON sexo.id = fecha.id
-            JOIN medicaltec.MainDicomTags pasid ON pasid.id = fecha.id  
-            WHERE fecha.id = ${estudio.ID} and fecha.tagGroup=8 and fecha.tagElement=32 and nombre.tagGroup=16 and nombre.tagElement=16 and sexo.tagGroup=16 and sexo.tagElement=64 and pasid.tagGroup=16 and pasid.tagElement=32;`
+            JOIN medicaltec.MainDicomTags pasid ON pasid.id = fecha.id
+            join (select * from medicaltec.Resources where resourceType=1) B on fecha.id = B.internalId
+            WHERE fecha.id = ${estudio.ID} and fecha.tagGroup=8 and fecha.tagElement=32 and nombre.tagGroup=16 and nombre.tagElement=16 and sexo.tagGroup=16 and sexo.tagElement=64 and pasid.tagGroup=16 and pasid.tagElement=32;`  
             con.connect()
             con.query(query,async (err,sqlres)=>{
                 let series = await agregarseries(sqlres[0].ID)
@@ -188,7 +189,7 @@ module.exports.externo = async function externo(token){
     })
 }
 
-module.exports.medibook = async function medibook(id){
+/*module.exports.medibook = async function medibook(id){
     let con = mysql.createConnection(condata);
     return new Promise((Pres,Prej)=>{
         let query = `select  PATID.id as ID, FECHA.value as FECHA 
@@ -201,4 +202,4 @@ module.exports.medibook = async function medibook(id){
         })
         con.end()
     })
-}
+}*/
