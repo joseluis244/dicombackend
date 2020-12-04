@@ -1,3 +1,10 @@
+const conf = JSON.parse( fs.readFileSync("./conf.json").toString() )
+/**
+ * 
+ * @param {String} datos Url de redireccion
+ * @param {String} modalidad Modalidad de estudios
+ * @param {String} nombre Nobre del paciente
+ */
 function mensaje(datos,modalidad,nombre){
 return(
 
@@ -33,7 +40,7 @@ return(
                             style="padding: 40px 0 30px 0;"
                           >
                             <img
-                              src="https://uploads.codesandbox.io/uploads/user/ce79f30c-541c-437c-9d78-8f7844094ac3/3-sz-logoletras.png"
+                              src=${conf.UrlLogo}
                               alt="med"
                               width="300"
                               height="350"
@@ -57,7 +64,7 @@ return(
                                 <td
                                   style="padding: 20px 5px 30px 5px;font-size: 20px;font-family: monospace;"
                                 >
-                                  Medicaltec Soluciones Envia este correo electronico para
+                                  ${conf.NombreInstitucion} Envia este correo electronico para
                                   notificar que ya tiene acceso a el estudio de:<span style="font-weight: bold;"> ${modalidad} </span>
                                   del paciente:<span style="font-weight: bold;"> ${nombre} </span>haciendo click
                                   en el enlace inferior:

@@ -6,11 +6,9 @@ require('dotenv').config()
 const mensaje = require('./generarcorreo');
 const mysqldb = require('./mysqldb');
 const pako = require("pako")
-const jwt = require('jsonwebtoken')
 const multer  = require('multer')
 const request = require("request")
-const fs = require("fs")
-const conf = JSON.parse( fs.readFileSync("./conf.json").toString() )
+
 
 const upload = multer({ dest: 'informes/' })
 ///////////////////////////////
@@ -21,10 +19,10 @@ mongoose.connect('mongodb://localhost/medpacs', {useNewUrlParser: true});
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {type: 'oauth2',
-            user: 'jose.camacho@medicaltecsrl.com',
-            clientId: '1016773695194-0pvkmmakfrfdv2jev11mbcqifj2fpk54.apps.googleusercontent.com',
-            clientSecret: 'BkBnu-R9Yk88Rh7SQSga0A-U',
-            refreshToken: '1//041s8Get3Yo0UCgYIARAAGAQSNwF-L9IrSQbn4FBAzfikUbeU1ci0sNaUpQaeQlTAKwStqbOMU8SSDlIGJHsNF02oWrBAvf4zObw'
+            user: process.env.USER,
+            clientId: process.env.CLIENTID,
+            clientSecret: process.env.MAILSECRET,
+            refreshToken: process.env.TOKEN
         }
 });
 
@@ -140,6 +138,9 @@ router.get('/visorexterno/:token',(req,res)=>{
     })
 })
 
+router.get('/facturacion',(req,res)=>{
+    res.send("facturacion")
+})
 /*router.get("/medibook/:id/:date",(req,res)=>{
     let id = req.params.id
     let date = parseInt(req.params.date)

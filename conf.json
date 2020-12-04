@@ -1,4 +1,6 @@
 {
     "Seguro":false,
-    "Remitente" : "Medicaltec SRL"
+    "Remitente" : "Medicaltec SRL",
+    "NombreInstitucion" : "Medicaltec Soluciones SRL",
+    "UrlLogo":"https://uploads.codesandbox.io/uploads/user/ce79f30c-541c-437c-9d78-8f7844094ac3/3-sz-logoletras.png"
 }
