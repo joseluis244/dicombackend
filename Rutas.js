@@ -9,6 +9,9 @@ const pako = require("pako")
 const multer  = require('multer')
 const request = require("request")
 
+const fs = require('fs')
+const conf = JSON.parse( fs.readFileSync("./conf.json").toString() )
+
 
 const upload = multer({ dest: 'informes/' })
 ///////////////////////////////
