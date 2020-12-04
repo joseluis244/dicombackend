@@ -20,11 +20,14 @@ mongoose.connect('mongodb://localhost/medpacs', {useNewUrlParser: true});
 ///////////////////////////////
 
 console.log("Test",process.env.NODE_USER)
+console.log("Test",process.env.CLIENTID)
+console.log("Test",process.env.MAILSECRET)
+console.log("Test",process.env.TOKEN)
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {type: 'oauth2',
-            user: process.env.USER,
+            user: process.env.NODE_USER,
             clientId: process.env.CLIENTID,
             clientSecret: process.env.MAILSECRET,
             refreshToken: process.env.TOKEN
