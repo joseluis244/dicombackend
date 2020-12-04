@@ -19,6 +19,8 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/medpacs', {useNewUrlParser: true});
 ///////////////////////////////
 
+console.log(process.env.USER)
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {type: 'oauth2',
