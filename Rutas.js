@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config()
 const mensaje = require('./generarcorreo');
 const mysqldb = require('./mysqldb');
+const mysqldb0 = require('./mysqldb0');
 const pako = require("pako")
 const multer  = require('multer')
 const request = require("request")
@@ -49,12 +50,25 @@ router.get('/autenticacion/:token',(req,res)=>{
 })
 
 
-router.get('/getestudios',(req,res)=>{
+router.get('/getestudios2',(req,res)=>{
+    let initcontrol = new Date().getTime()
     let inicio,final
     req.param("inicio")?inicio= parseInt( req.param("inicio") ):inicio=19000101
     req.param("fin")?final=parseInt( req.param("fin") ):final=40001212
     mysqldb.buscarestudios(inicio,final)
     .then((dbres)=>{
+        let fincontrol = new Date().getTime()
+        console.log(fincontrol - initcontrol)
+        res.json(dbres)
+    })
+})
+
+router.get('/getestudios',(req,res)=>{
+    let inicio,final
+    req.param("inicio")?inicio= parseInt( req.param("inicio") ):inicio=19000101
+    req.param("fin")?final=parseInt( req.param("fin") ):final=40001212
+    mysqldb0.GetListaEstudios(inicio,final)
+    .then(dbres=>{
         res.json(dbres)
     })
 })
