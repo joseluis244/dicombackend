@@ -1,10 +1,29 @@
 const mysql = require("mysql");
+var DBMEMORI = []
 const condata = {
   host: "localhost",
   user: "medicaltecmysql",
   password: "Medicaltec310188$",
   database: "medicaltec",
 };
+DBmemoria()
+setInterval(() => {
+  DBmemoria()
+}, 60000);
+
+function DBmemoria() {
+  ConsultaEstudios(19000101, 40001212)
+    .then((res) => {
+      if (res.length > 0) {
+        DBMEMORI = CrearLista(res);
+      } else {
+        DBMEMORI=[]
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
 
 
 class Estudio {
@@ -84,7 +103,7 @@ function ConsultaEstudios(fechainicio,fechafinal) {
     F.internalId ASC,
     cast(K.value as UNSIGNED) ASC;`;
 let query2 = `SELECT A.id as ID, A.value as FECHA, B.value as NOMBRE,C.value as SEXO, D.value as PAS_ID,E.publicId as EST_UID,
-    F.internalId as SER_UID,F.publicId as SER_ID, G.value as NOMBRE_EST, H.value as MODALIDAD, j.uuid as INS_UID, K.value as POS
+    F.internalId as SER_UID,F.publicId as SER_ID, G.value as NOMBRE_EST, H.value as MODALIDAD, J.uuid as INS_UID, K.value as POS
     FROM medicaltec.MainDicomTags A 
     left join (SELECT * FROM medicaltec.MainDicomTags where tagGroup=16 and tagElement=16) B on A.id = B.id
     left join (SELECT * FROM medicaltec.MainDicomTags where tagGroup=16 and tagElement=64) C on A.id = C.id
@@ -110,8 +129,8 @@ let query2 = `SELECT A.id as ID, A.value as FECHA, B.value as NOMBRE,C.value as 
   return new Promise((Pres, Prej) => {
     con.query(query, (err, res) => {
       Pres(res);
-      con.end();
     });
+    con.end();
   });
 }
 
@@ -136,15 +155,32 @@ function CrearLista(array) {
   }
   return(lista);
 }
+/**
+ * 
+ * @param {Number} I fecha inicio formato de fecha YYYYMMDD
+ * @param {Number} F fecha final formato de fecha YYYYMMDD
+ */
 module.exports.GetListaEstudios = (I,F)=>{
     return new Promise((Pres,Prej)=>{
-        ConsultaEstudios(I,F).then((res) => {
+      let envio = []
+      for (let index = 0; index < DBMEMORI.length; index++) {
+        const element = DBMEMORI[index];
+        if(element.FECHA >= I && element.FECHA <= F){
+          envio.push(element)
+        }
+      }
+      Pres(envio)
+        /*ConsultaEstudios(I,F)
+        .then((res) => {
             if(res.length > 0){
                 let ListaEstudios = CrearLista(res);
                 Pres(ListaEstudios)
             }else{
                 Pres([])
             }
-        });
+        })
+        .catch(err=>{
+          console.log(err)
+        })*/
     })
 }

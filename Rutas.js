@@ -38,6 +38,7 @@ const transporter = nodemailer.createTransport({
 router.post('/login',(req,res)=>{
     db.login(req.body)
     .then((dbres)=>{
+        console.log(dbres)
         res.json({db:dbres})
     })
 })
@@ -70,6 +71,7 @@ router.get('/getestudios',(req,res)=>{
     mysqldb0.GetListaEstudios(inicio,final)
     .then(dbres=>{
         res.json(dbres)
+        res.end()
     })
 })
 
@@ -103,7 +105,6 @@ router.post('/cargarInforme',upload.any(), (req,res)=>{
        let estudio = JSON.parse(req.body.estudio)
        let fechasubida = req.body.fechasubida
        let informe = req.files[0]
-       console.log(informe)
        db.guardarinforme(informe,estudio,fechasubida)
        res.json({estado:true})
 })
