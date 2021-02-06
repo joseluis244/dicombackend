@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-var DBMEMORI = []
+var DBMEMORI = {activo:false,registros:[],cantidadregistros:0}
 const condata = {
   host: "localhost",
   user: "medicaltecmysql",
@@ -8,25 +8,60 @@ const condata = {
 };
 DBmemoria()
 setInterval(() => {
-  DBmemoria()
+  if(!DBMEMORI.activo){
+    DBmemoria()
+  }
 }, 60000);
 
 function DBmemoria() {
-  ConsultaEstudios(19000101, 40001212)
-    .then((res) => {
-      if (res.length > 0) {
-        DBMEMORI = CrearLista(res);
-      } else {
-        DBMEMORI=[]
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  DBMEMORI.activo = true
+  ContarRegistros()
+  .then(cantidadregistros=>{
+    if(cantidadregistros != DBMEMORI.cantidadregistros){
+      ConsultaEstudios(19000101, 40001212)
+      .then((res) => {
+        if (res.length > 0) {
+          DBMEMORI.registros = CrearLista(res);
+        } else {
+          DBMEMORI.registros = []
+        }
+        DBMEMORI.activo = false
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    }else{
+      DBMEMORI.activo = false
+    }
+  })
 }
 
+/**
+ * cuenta los registros de la base de datos
+ */
+function ContarRegistros(){
+  let con = mysql.createConnection(condata);
+  let query = `SELECT count(*) as cantidad FROM medicaltec.MainDicomTags;`
+  con.connect();
+  return new Promise((Pres,Prej)=>{
+    con.query(query, (err, res) => {
+      if(err){
+        Prej(err)
+      }
+      Pres(res);
+    });
+    con.end();
+  })
+}
 
+/**
+ * objeto Estudio
+ */
 class Estudio {
+  /**
+   * 
+   * @param {Array} elemento primer elemento del array
+   */
   constructor(elemento) {
     this.ID = elemento.ID;
     this.FECHA = elemento.FECHA;
@@ -163,8 +198,8 @@ function CrearLista(array) {
 module.exports.GetListaEstudios = (I,F)=>{
     return new Promise((Pres,Prej)=>{
       let envio = []
-      for (let index = 0; index < DBMEMORI.length; index++) {
-        const element = DBMEMORI[index];
+      for (let index = 0; index < DBMEMORI.registros.length; index++) {
+        const element = DBMEMORI.registros[index];
         if(element.FECHA >= I && element.FECHA <= F){
           envio.push(element)
         }
