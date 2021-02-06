@@ -8,10 +8,26 @@ const condata = {
 };
 DBmemoria()
 setInterval(() => {
-  if(!DBMEMORI.activo){
-    DBmemoria()
-  }
+if(!activo){
+	DBmemoria()
+}
 }, 60000);
+
+function DBmemoria() {
+	activo = true
+  ConsultaEstudios(19000101, 40001212)
+    .then((res) => {
+      if (res.length > 0) {
+        DBMEMORI = CrearLista(res);
+      } else {
+        DBMEMORI=[]
+      }
+  	activo=false
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
 
 function DBmemoria() {
   DBMEMORI.activo = true
