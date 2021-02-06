@@ -8,7 +8,7 @@ const condata = {
 };
 DBmemoria()
 setInterval(() => {
-if(!activo){
+if(!DBMEMORI.activo){
 	DBmemoria()
 }
 }, 60000);
