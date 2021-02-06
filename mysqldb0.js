@@ -13,7 +13,7 @@ if(!activo){
 }
 }, 60000);
 
-function DBmemoria() {
+/*function DBmemoria() {
 	activo = true
   ConsultaEstudios(19000101, 40001212)
     .then((res) => {
@@ -27,7 +27,7 @@ function DBmemoria() {
     .catch((e) => {
       console.log(e);
     });
-}
+}*/
 
 function DBmemoria() {
   DBMEMORI.activo = true
